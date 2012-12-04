@@ -18,7 +18,7 @@ class MessageAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'sender', 'body',
+                'sender', 'body', 'public',
             ),
             'classes': ('monospace' ),
         }),
@@ -29,7 +29,7 @@ class MessageAdmin(admin.ModelAdmin):
             'classes': ('collapse', 'wide'),
         }),
     )
-    list_display = ('sender', 'body', 'sent_at')
+    list_display = ('sender', 'body', 'public', 'sent_at')
     list_filter = ('sent_at', 'sender')
     search_fields = ('body',)
 

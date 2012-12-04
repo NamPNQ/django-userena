@@ -11,6 +11,8 @@ class ComposeForm(forms.Form):
     body = forms.CharField(label=_("Message"),
                            widget=forms.Textarea({'class': 'message'}),
                            required=True)
+    public = forms.BooleanField(label=_("Public"),
+                                required=False)
 
     def save(self, sender):
         """
@@ -27,9 +29,11 @@ class ComposeForm(forms.Form):
         """
         to_user_list = self.cleaned_data['to']
         body = self.cleaned_data['body']
+        public = self.cleaned_data['public']
 
         msg = Message.objects.send_message(sender,
                                            to_user_list,
-                                           body)
+                                           body,
+                                           public)
 
         return msg

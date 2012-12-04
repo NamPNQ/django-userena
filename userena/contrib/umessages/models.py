@@ -105,6 +105,8 @@ class Message(models.Model):
                                              null=True,
                                              blank=True)
 
+    public = models.BooleanField(default=True)
+
     objects = MessageManager()
 
     class Meta:

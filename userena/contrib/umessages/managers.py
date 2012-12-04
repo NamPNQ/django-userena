@@ -56,7 +56,7 @@ class MessageContactManager(models.Manager):
 class MessageManager(models.Manager):
     """ Manager for the :class:`Message` model. """
 
-    def send_message(self, sender, to_user_list, body):
+    def send_message(self, sender, to_user_list, body, public):
         """
         Send a message from a user, to a user.
 
@@ -66,12 +66,16 @@ class MessageManager(models.Manager):
         :param to_user_list:
             A list which elements are :class:`User` to whom the message is for.
 
-        :param message:
+        :param body:
             String containing the message.
+
+        :param public:
+            Boolean value indicate if the message is public or public.
 
         """
         msg = self.model(sender=sender,
-                         body=body)
+                         body=body,
+                         public=public)
         msg.save()
 
         # Save the recipients
@@ -86,6 +90,12 @@ class MessageManager(models.Manager):
                                  sender_deleted_at__isnull=True) |
                                Q(sender=to_user, recipients=from_user,
                                  messagerecipient__deleted_at__isnull=True))
+        return messages
+
+    def get_public_messages(self, to_user):
+        """ Returns a list of public messages sent to a user """
+        messages = self.filter(recipients=to_user, public=True, 
+                                sender_deleted_at__isnull=True)
         return messages
 
 class MessageRecipientManager(models.Manager):
